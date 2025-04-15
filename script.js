@@ -1,10 +1,51 @@
 var jsPsych = initJsPsych(
-    // {on_finish: () => {jsPsych.data.displayData()
-    // }}
+    {on_finish: () => {
+      fetch('https://script.google.com/macros/s/AKfycbx_ROqOJGgNHR2NsfOrzXuvzMqJNCAr3YFwvslVfjGRWV-y7yATJ4OcGpg2Fb8U4jfP/exec', {
+        method: 'POST',
+        body: JSON.stringify({
+          participant_id: 'user_123',  // dynamically set this
+          jspsych_data: jsPsych.data.get().values()
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        console.log('Data sent to Google Sheets');
+      }).catch(err => {
+        console.error('Error sending data:', err);
+      });
+    }}
 );
 
-var timeline = [];
+// var jsPsych = initJsPsych(
+//     {on_finish: () => {jsPsych.data.displayData()
+//     }}
+// );
 
+
+function test() {
+    fetch('https://script.google.com/macros/s/AKfycbx_ROqOJGgNHR2NsfOrzXuvzMqJNCAr3YFwvslVfjGRWV-y7yATJ4OcGpg2Fb8U4jfP/exec', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        participant_id: 'user_123',
+        jspsych_data: [{ hello: 123 }, { helo: 123 }]
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("Success:", data);
+    })
+    .catch(err => {
+      console.error("Error:", err);
+    });
+  }
+  
+  test();
+
+var timeline = [];
 var preload = {
     type: jsPsychPreload,
     images: ['img/blue.png', 'img/orange.png']
@@ -113,21 +154,23 @@ var debrief_block = {
 timeline.push(debrief_block)
 
 
-jsPsych.run(timeline, {
-    on_finish: function() {
-      fetch('https://script.google.com/macros/s/AKfycbx_ROqOJGgNHR2NsfOrzXuvzMqJNCAr3YFwvslVfjGRWV-y7yATJ4OcGpg2Fb8U4jfP/exec', {
-        method: 'POST',
-        body: JSON.stringify({
-          participant_id: 'user_123',  // dynamically set this
-          jspsych_data: jsPsych.data.get()
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        console.log('Data sent to Google Sheets');
-      }).catch(err => {
-        console.error('Error sending data:', err);
-      });
-    }
-  });
+// jsPsych.run(timeline, {
+//     on_finish: function() {
+//       fetch('https://script.google.com/macros/s/AKfycbx_ROqOJGgNHR2NsfOrzXuvzMqJNCAr3YFwvslVfjGRWV-y7yATJ4OcGpg2Fb8U4jfP/exec', {
+//         method: 'POST',
+//         body: JSON.stringify({
+//           participant_id: 'user_123',  // dynamically set this
+//           jspsych_data: jsPsych.data.get()
+//         }),
+//         headers: {
+//           'Content-Type': 'application/json'
+//         }
+//       }).then(response => {
+//         console.log('Data sent to Google Sheets');
+//       }).catch(err => {
+//         console.error('Error sending data:', err);
+//       });
+//     }
+//   });
+
+jsPsych.run(timeline);
