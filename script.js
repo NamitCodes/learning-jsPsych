@@ -119,7 +119,7 @@ jsPsych.run(timeline, {
         method: 'POST',
         body: JSON.stringify({
           participant_id: 'user_123',  // dynamically set this
-          jspsych_data: jsPsych.data.get().values()
+          jspsych_data: jsPsych.data.get()
         }),
         headers: {
           'Content-Type': 'application/json'
