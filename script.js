@@ -113,4 +113,21 @@ var debrief_block = {
 timeline.push(debrief_block)
 
 
-jsPsych.run(timeline)
+jsPsych.run(timeline, {
+    on_finish: function() {
+      fetch('https://script.google.com/macros/s/AKfycbx_ROqOJGgNHR2NsfOrzXuvzMqJNCAr3YFwvslVfjGRWV-y7yATJ4OcGpg2Fb8U4jfP/exec', {
+        method: 'POST',
+        body: JSON.stringify({
+          participant_id: 'user_123',  // dynamically set this
+          jspsych_data: jsPsych.data.get().values()
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        console.log('Data sent to Google Sheets');
+      }).catch(err => {
+        console.error('Error sending data:', err);
+      });
+    }
+  });
